@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>Тренажёр: Вид расчёта → Определения</title>
+  <title>Тренажёр: Термины и определения</title>
   <style>
     * {
       margin: 0;
@@ -122,6 +122,12 @@
       font-size: 0.95rem;
       line-height: 1.35;
       min-height: 2.8rem;
+    }
+
+    /* Стиль для placeholder (невыбранного состояния) — голубой текст */
+    .elegant-select.placeholder-selected {
+      color: #4a8bc2;
+      font-weight: 500;
     }
 
     .elegant-select:hover {
@@ -293,7 +299,7 @@
 
 <script>
   // --------------------------------------------------------------
-  // НОВЫЕ ДАННЫЕ ДЛЯ ТРЕНАЖЁРА (по заданию пользователя)
+  // ДАННЫЕ ДЛЯ ТРЕНАЖЁРА
   // Левый столбец (выбор) — "Термин"
   // Правый столбец (закреплённый текст) — "Определение"
   // --------------------------------------------------------------
@@ -408,8 +414,8 @@
     selectedValues = [];
 
     trainingData.forEach((item, idx) => {
-      // Значение по умолчанию — первый вариант из списка (удобно для UX)
-      const defaultOption = item.options[0];
+      // Значение по умолчанию — пустая строка (ничего не выбрано)
+      const defaultOption = "";
       selectedValues[idx] = defaultOption;
 
       // Создаём строку
@@ -417,35 +423,54 @@
       rowDiv.className = 'row-item';
       rowDiv.setAttribute('data-row-index', idx);
 
-      // ----- ЛЕВАЯ КОЛОНКА: выпадающий список (термин) с поддержкой многострочного текста -----
+      // ----- ЛЕВАЯ КОЛОНКА: выпадающий список (термин) -----
       const leftSelectCard = document.createElement('div');
       leftSelectCard.className = 'select-card';
       const selectElem = document.createElement('select');
       selectElem.className = 'elegant-select';
       selectElem.setAttribute('data-idx', idx);
       
-      // Важно: задаём размеры, чтобы select мог растягиваться по высоте при необходимости
       selectElem.style.width = '100%';
+      
+      // ---- ВАЖНО: добавляем пустой option-плейсхолдер первым ----
+      const placeholderOption = document.createElement('option');
+      placeholderOption.value = "";
+      placeholderOption.textContent = "— Выберите термин —";
+      placeholderOption.disabled = true;
+      placeholderOption.selected = true;
+      placeholderOption.style.color = "#4a8bc2";
+      selectElem.appendChild(placeholderOption);
       
       // Заполняем опции (все возможные термины)
       item.options.forEach(opt => {
         const optionElem = document.createElement('option');
         optionElem.value = opt;
         optionElem.textContent = opt;
-        // Для длинных строк обеспечиваем перенос через CSS + атрибут
         optionElem.style.whiteSpace = 'normal';
         optionElem.style.wordBreak = 'break-word';
-        if (opt === defaultOption) {
-          optionElem.selected = true;
-        }
         selectElem.appendChild(optionElem);
       });
+
+      // Применяем класс для голубого цвета, так как выбран placeholder
+      selectElem.classList.add('placeholder-selected');
 
       // Обработчик изменения выбора
       selectElem.addEventListener('change', (e) => {
         const rowIndex = parseInt(e.target.getAttribute('data-idx'));
-        selectedValues[rowIndex] = e.target.value;
-        // При изменении сбрасываем подсветку и сообщение (тренажёр становится нейтральным)
+        const newValue = e.target.value;
+        selectedValues[rowIndex] = newValue;
+        
+        // Управляем классом placeholder-selected: если выбрано пустое значение (не должно быть, но на всякий случай)
+        // или если значение не из списка терминов (пустое) — оставляем голубой стиль.
+        // Поскольку placeholder отключен и не может быть выбран снова, пользователь всегда выбирает термин.
+        // Но если пользователь каким-то образом сбросит? Такого не произойдёт, но подстрахуемся:
+        if (newValue === "") {
+          selectElem.classList.add('placeholder-selected');
+        } else {
+          selectElem.classList.remove('placeholder-selected');
+        }
+        
+        // При изменении сбрасываем подсветку и сообщение
         clearValidationStyles();
         messageDiv.innerHTML = '';
       });
@@ -474,17 +499,6 @@
         index: idx
       });
     });
-    
-    // Дополнительно: после рендера убедимся, что option во всех select имеют корректный перенос
-    for (let i = 0; i < rowElements.length; i++) {
-      const select = rowElements[i].select;
-      const options = select.options;
-      for (let j = 0; j < options.length; j++) {
-        options[j].style.whiteSpace = 'normal';
-        options[j].style.wordBreak = 'break-word';
-        options[j].style.padding = '0.4rem 0.6rem';
-      }
-    }
   }
 
   // Сброс классов валидации (удаляем зелёные/красные подсветки)
@@ -514,7 +528,7 @@
     for (let i = 0; i < rowElements.length; i++) {
       const row = rowElements[i];
       const userChoice = selectedValues[i];
-      const isRowCorrect = (userChoice === row.correctAnswer);
+      const isRowCorrect = (userChoice !== "" && userChoice === row.correctAnswer);
 
       if (!isRowCorrect) {
         allCorrect = false;
@@ -542,14 +556,12 @@
   function init() {
     renderTable();
     syncSelectedFromDOM();
-    // Убираем любые сообщения и классы при старте
     clearValidationStyles();
     messageDiv.innerHTML = '';
   }
 
   // Назначение обработчика на кнопку
   function bindEvents() {
-    // Убираем предыдущие слушатели, чтобы избежать дублей (простой способ — заменить кнопку)
     const newCheckBtn = checkButton.cloneNode(true);
     checkButton.parentNode.replaceChild(newCheckBtn, checkButton);
     const finalBtn = document.getElementById('checkBtn');
