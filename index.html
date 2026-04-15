@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Тренажёр: Вид расчёта → Определения</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(145deg, #eef2f7 0%, #d9e0e8 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, 'Roboto', sans-serif;
+      padding: 2rem;
+    }
+
+    /* карточка тренажёра */
+    .trainer-card {
+      max-width: 1400px;
+      width: 100%;
+      background: #ffffff;
+      border-radius: 2rem;
+      box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.25), 0 4px 12px rgba(0, 0, 0, 0.05);
+      overflow: hidden;
+      transition: all 0.2s ease;
+    }
+
+    .trainer-container {
+      padding: 1.8rem 2rem 2rem 2rem;
+    }
+
+    /* шапка таблицы */
+    .table-header {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 1.8rem;
+      border-bottom: 2px solid #e6edf4;
+      padding-bottom: 1rem;
+    }
+
+    .header-cell {
+      font-weight: 600;
+      font-size: 1.35rem;
+      letter-spacing: -0.2px;
+      color: #1f2a3e;
+      background: #f8fafd;
+      padding: 0.9rem 1rem;
+      border-radius: 1.2rem;
+      text-align: center;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+    }
+
+    /* сетка строк */
+    .matching-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .row-item {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      align-items: stretch;
+    }
+
+    /* левая колонка — выпадающий список (термин) */
+    .select-card {
+      background: #ffffff;
+      border: 1.8px solid #95CAFA;
+      border-radius: 1.2rem;
+      padding: 0.5rem 1rem;
+      display: flex;
+      align-items: center;
+      transition: all 0.2s;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+    }
+
+    /* стили для select с возможностью переноса текста */
+    .elegant-select {
+      width: 100%;
+      padding: 0.75rem 1.8rem 0.75rem 0.9rem;
+      font-size: 0.98rem;
+      font-family: 'Segoe UI', 'Inter', sans-serif;
+      font-weight: 500;
+      color: #1e2a3a;
+      background-color: #ffffff;
+      border: none;
+      border-radius: 0.9rem;
+      cursor: pointer;
+      outline: none;
+      transition: all 0.2s;
+      letter-spacing: -0.2px;
+      line-height: 1.4;
+      
+      /* Ключевые свойства для многострочного текста в option и в select */
+      white-space: normal;
+      word-wrap: break-word;
+      word-break: break-word;
+      
+      appearance: none;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%23465a72' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>");
+      background-repeat: no-repeat;
+      background-position: right 0.8rem center;
+      background-size: 1.1rem;
+    }
+
+    /* Стили для option внутри select — поддерживаем перенос текста */
+    .elegant-select option {
+      white-space: normal;
+      word-wrap: break-word;
+      word-break: break-word;
+      padding: 0.6rem 0.8rem;
+      font-size: 0.95rem;
+      line-height: 1.35;
+      min-height: 2.8rem;
+    }
+
+    .elegant-select:hover {
+      background-color: #fbfeff;
+    }
+
+    .elegant-select:focus {
+      border-color: #95CAFA;
+      box-shadow: 0 0 0 2px rgba(149, 202, 250, 0.3);
+    }
+
+    /* правая колонка — закреплённый текст (определение) */
+    .fixed-text-card {
+      background: #ffffff;
+      border: 1.8px solid #95CAFA;
+      border-radius: 1.2rem;
+      padding: 1rem 1.2rem;
+      transition: all 0.2s;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+      display: flex;
+      align-items: center;
+      min-height: 88px;
+    }
+
+    .fixed-text-card span {
+      font-size: 1rem;
+      font-weight: 500;
+      color: #1f2a3e;
+      line-height: 1.45;
+      letter-spacing: -0.2px;
+      word-break: break-word;
+    }
+
+    /* кнопка проверки */
+    .check-button-wrapper {
+      margin-top: 2.5rem;
+      display: flex;
+      justify-content: center;
+    }
+
+    .check-btn {
+      background: #1f2a3e;
+      border: none;
+      padding: 0.9rem 2.5rem;
+      font-size: 1rem;
+      font-weight: 600;
+      font-family: inherit;
+      color: white;
+      border-radius: 2.5rem;
+      cursor: pointer;
+      transition: 0.2s;
+      letter-spacing: 0.3px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .check-btn:hover {
+      background: #2c3e5c;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.15);
+    }
+
+    .check-btn:active {
+      transform: translateY(1px);
+    }
+
+    /* сообщения */
+    .message-area {
+      margin-top: 1.8rem;
+      text-align: center;
+      font-size: 0.95rem;
+      font-weight: 500;
+      min-height: 3rem;
+      letter-spacing: -0.2px;
+    }
+
+    .error-message {
+      color: #d14545;
+      background: #fff5f5;
+      display: inline-block;
+      padding: 0.6rem 1.4rem;
+      border-radius: 2rem;
+      font-weight: 500;
+    }
+
+    .success-message {
+      color: #2a7a3b;
+      background: #edf7f0;
+      display: inline-block;
+      padding: 0.6rem 1.4rem;
+      border-radius: 2rem;
+      font-weight: 500;
+    }
+
+    /* состояния ячеек после проверки */
+    .row-correct .select-card,
+    .row-correct .fixed-text-card {
+      background-color: #e1f7e8;
+      border-color: #2e8b57;
+      transition: all 0.2s ease;
+    }
+
+    .row-incorrect .select-card,
+    .row-incorrect .fixed-text-card {
+      background-color: #ffe6e6;
+      border-color: #d14545;
+      transition: all 0.2s ease;
+    }
+
+    /* адаптивность */
+    @media (max-width: 850px) {
+      body {
+        padding: 1rem;
+      }
+      .trainer-container {
+        padding: 1.2rem;
+      }
+      .row-item {
+        gap: 0.8rem;
+      }
+      .header-cell {
+        font-size: 1.1rem;
+        padding: 0.6rem;
+      }
+      .fixed-text-card span {
+        font-size: 0.9rem;
+      }
+      .elegant-select {
+        font-size: 0.85rem;
+        padding: 0.7rem 1.8rem 0.7rem 0.8rem;
+        line-height: 1.35;
+      }
+      .elegant-select option {
+        font-size: 0.85rem;
+        padding: 0.5rem 0.6rem;
+      }
+    }
+
+    /* дополнительно для очень маленьких экранов */
+    @media (max-width: 600px) {
+      .elegant-select {
+        font-size: 0.8rem;
+        white-space: normal;
+      }
+      .fixed-text-card span {
+        font-size: 0.85rem;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="trainer-card">
+  <div class="trainer-container">
+    <!-- Шапка столбцов -->
+    <div class="table-header">
+      <div class="header-cell">Термин</div>
+      <div class="header-cell">Определение</div>
+    </div>
+
+    <!-- Динамическая таблица: левая часть (select) + правая часть (текст определения) -->
+    <div class="matching-grid" id="matchingGrid"></div>
+
+    <div class="check-button-wrapper">
+      <button class="check-btn" id="checkBtn">Проверить</button>
+    </div>
+
+    <div class="message-area" id="messageArea"></div>
+  </div>
+</div>
+
+<script>
+  // --------------------------------------------------------------
+  // НОВЫЕ ДАННЫЕ ДЛЯ ТРЕНАЖЁРА (по заданию пользователя)
+  // Левый столбец (выбор) — "Термин"
+  // Правый столбец (закреплённый текст) — "Определение"
+  // --------------------------------------------------------------
+  const trainingData = [
+    {
+      fixedInstruction: "Соглашение между сторонами, при котором каждая обязуется что-то сделать или передать.",
+      options: [
+        "Договор",
+        "Актив по договору",
+        "Обязательство по договору",
+        "Доход",
+        "Покупатель",
+        "Выручка",
+        "Цена сделки"
+      ],
+      correctValue: "Договор"
+    },
+    {
+      fixedInstruction: "Право компании получить деньги или возмещение за работу, которую уже выполнили, или товары, которые передали.",
+      options: [
+        "Договор",
+        "Актив по договору",
+        "Обязательство по договору",
+        "Доход",
+        "Покупатель",
+        "Выручка",
+        "Цена сделки"
+      ],
+      correctValue: "Актив по договору"
+    },
+    {
+      fixedInstruction: "Обязанность компании передать товар или оказать услугу, если она уже получила оплату или должна ее получить заранее.",
+      options: [
+        "Договор",
+        "Актив по договору",
+        "Обязательство по договору",
+        "Доход",
+        "Покупатель",
+        "Выручка",
+        "Цена сделки"
+      ],
+      correctValue: "Обязательство по договору"
+    },
+    {
+      fixedInstruction: "Увеличение экономических выгод в течение отчетного периода, которое приводит к росту капитала компании (кроме вложений собственников).",
+      options: [
+        "Договор",
+        "Актив по договору",
+        "Обязательство по договору",
+        "Доход",
+        "Покупатель",
+        "Выручка",
+        "Цена сделки"
+      ],
+      correctValue: "Доход"
+    },
+    {
+      fixedInstruction: "Тот, кто покупает товар или услугу у компании по договору.",
+      options: [
+        "Договор",
+        "Актив по договору",
+        "Обязательство по договору",
+        "Доход",
+        "Покупатель",
+        "Выручка",
+        "Цена сделки"
+      ],
+      correctValue: "Покупатель"
+    },
+    {
+      fixedInstruction: "Доход, который компания получает от своей основной деятельности.",
+      options: [
+        "Договор",
+        "Актив по договору",
+        "Обязательство по договору",
+        "Доход",
+        "Покупатель",
+        "Выручка",
+        "Цена сделки"
+      ],
+      correctValue: "Выручка"
+    },
+    {
+      fixedInstruction: "Сумма, которую компания ожидает получить от покупателя за товары или услуги, без учета сумм, которые она получает за третьих.",
+      options: [
+        "Договор",
+        "Актив по договору",
+        "Обязательство по договору",
+        "Доход",
+        "Покупатель",
+        "Выручка",
+        "Цена сделки"
+      ],
+      correctValue: "Цена сделки"
+    }
+  ];
+
+  // DOM элементы
+  const gridContainer = document.getElementById('matchingGrid');
+  const checkButton = document.getElementById('checkBtn');
+  const messageDiv = document.getElementById('messageArea');
+
+  // Хранилище выбранных значений (по индексу строки)
+  let selectedValues = [];
+  // Хранилище ссылок на DOM-элементы строк
+  let rowElements = [];
+
+  // Функция отрисовки таблицы (левый select, правый фикс. текст)
+  function renderTable() {
+    gridContainer.innerHTML = '';
+    rowElements = [];
+    selectedValues = [];
+
+    trainingData.forEach((item, idx) => {
+      // Значение по умолчанию — первый вариант из списка (удобно для UX)
+      const defaultOption = item.options[0];
+      selectedValues[idx] = defaultOption;
+
+      // Создаём строку
+      const rowDiv = document.createElement('div');
+      rowDiv.className = 'row-item';
+      rowDiv.setAttribute('data-row-index', idx);
+
+      // ----- ЛЕВАЯ КОЛОНКА: выпадающий список (термин) с поддержкой многострочного текста -----
+      const leftSelectCard = document.createElement('div');
+      leftSelectCard.className = 'select-card';
+      const selectElem = document.createElement('select');
+      selectElem.className = 'elegant-select';
+      selectElem.setAttribute('data-idx', idx);
+      
+      // Важно: задаём размеры, чтобы select мог растягиваться по высоте при необходимости
+      selectElem.style.width = '100%';
+      
+      // Заполняем опции (все возможные термины)
+      item.options.forEach(opt => {
+        const optionElem = document.createElement('option');
+        optionElem.value = opt;
+        optionElem.textContent = opt;
+        // Для длинных строк обеспечиваем перенос через CSS + атрибут
+        optionElem.style.whiteSpace = 'normal';
+        optionElem.style.wordBreak = 'break-word';
+        if (opt === defaultOption) {
+          optionElem.selected = true;
+        }
+        selectElem.appendChild(optionElem);
+      });
+
+      // Обработчик изменения выбора
+      selectElem.addEventListener('change', (e) => {
+        const rowIndex = parseInt(e.target.getAttribute('data-idx'));
+        selectedValues[rowIndex] = e.target.value;
+        // При изменении сбрасываем подсветку и сообщение (тренажёр становится нейтральным)
+        clearValidationStyles();
+        messageDiv.innerHTML = '';
+      });
+
+      leftSelectCard.appendChild(selectElem);
+
+      // ----- ПРАВАЯ КОЛОНКА: закреплённый текст (определение) -----
+      const rightTextCard = document.createElement('div');
+      rightTextCard.className = 'fixed-text-card';
+      const instructionSpan = document.createElement('span');
+      instructionSpan.textContent = item.fixedInstruction;
+      rightTextCard.appendChild(instructionSpan);
+
+      // Собираем строку
+      rowDiv.appendChild(leftSelectCard);
+      rowDiv.appendChild(rightTextCard);
+      gridContainer.appendChild(rowDiv);
+
+      // Сохраняем данные строки для последующей проверки
+      rowElements.push({
+        container: rowDiv,
+        leftCard: leftSelectCard,
+        rightCard: rightTextCard,
+        select: selectElem,
+        correctAnswer: item.correctValue,
+        index: idx
+      });
+    });
+    
+    // Дополнительно: после рендера убедимся, что option во всех select имеют корректный перенос
+    for (let i = 0; i < rowElements.length; i++) {
+      const select = rowElements[i].select;
+      const options = select.options;
+      for (let j = 0; j < options.length; j++) {
+        options[j].style.whiteSpace = 'normal';
+        options[j].style.wordBreak = 'break-word';
+        options[j].style.padding = '0.4rem 0.6rem';
+      }
+    }
+  }
+
+  // Сброс классов валидации (удаляем зелёные/красные подсветки)
+  function clearValidationStyles() {
+    if (!rowElements.length) return;
+    rowElements.forEach(row => {
+      row.container.classList.remove('row-correct', 'row-incorrect');
+    });
+  }
+
+  // Синхронизация selectedValues с текущим состоянием select'ов
+  function syncSelectedFromDOM() {
+    for (let i = 0; i < rowElements.length; i++) {
+      const selectEl = rowElements[i].select;
+      if (selectEl) {
+        selectedValues[i] = selectEl.value;
+      }
+    }
+  }
+
+  // Основная проверка: каждая строка — если выбранный термин совпадает с правильным,
+  // строка становится зелёной, иначе красной + выводится сообщение об ошибке.
+  function validateAndHighlight() {
+    clearValidationStyles();
+    let allCorrect = true;
+
+    for (let i = 0; i < rowElements.length; i++) {
+      const row = rowElements[i];
+      const userChoice = selectedValues[i];
+      const isRowCorrect = (userChoice === row.correctAnswer);
+
+      if (!isRowCorrect) {
+        allCorrect = false;
+        row.container.classList.add('row-incorrect');
+      } else {
+        row.container.classList.add('row-correct');
+      }
+    }
+
+    // Сообщение в зависимости от результата
+    if (allCorrect) {
+      messageDiv.innerHTML = '<div class="success-message">Всё верно! Все соответствия правильные.</div>';
+    } else {
+      messageDiv.innerHTML = '<div class="error-message">У вас ошибка. Проверьте выделенные красным строки.</div>';
+    }
+  }
+
+  // Действие перед проверкой: гарантируем актуальность выбранных значений
+  function beforeCheck() {
+    syncSelectedFromDOM();
+    validateAndHighlight();
+  }
+
+  // Инициализация и сброс стилей при старте
+  function init() {
+    renderTable();
+    syncSelectedFromDOM();
+    // Убираем любые сообщения и классы при старте
+    clearValidationStyles();
+    messageDiv.innerHTML = '';
+  }
+
+  // Назначение обработчика на кнопку
+  function bindEvents() {
+    // Убираем предыдущие слушатели, чтобы избежать дублей (простой способ — заменить кнопку)
+    const newCheckBtn = checkButton.cloneNode(true);
+    checkButton.parentNode.replaceChild(newCheckBtn, checkButton);
+    const finalBtn = document.getElementById('checkBtn');
+    finalBtn.addEventListener('click', beforeCheck);
+  }
+
+  // Запуск тренажёра
+  init();
+  bindEvents();
+</script>
+</body>
+</html>
