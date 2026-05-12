@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>Тренажёр: Термины и определения</title>
+  <title>Тренажёр: Определения → Термины</title>
   <style>
     * {
       margin: 0;
@@ -72,7 +72,29 @@
       align-items: stretch;
     }
 
-    /* левая колонка — выпадающий список (термин) */
+    /* левая колонка — закреплённый текст (определение) */
+    .fixed-text-card {
+      background: #ffffff;
+      border: 1.8px solid #95CAFA;
+      border-radius: 1.2rem;
+      padding: 1rem 1.2rem;
+      transition: all 0.2s;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+      display: flex;
+      align-items: center;
+      min-height: 88px;
+    }
+
+    .fixed-text-card span {
+      font-size: 1rem;
+      font-weight: 500;
+      color: #1f2a3e;
+      line-height: 1.45;
+      letter-spacing: -0.2px;
+      word-break: break-word;
+    }
+
+    /* правая колонка — выпадающий список (термин) */
     .select-card {
       background: #ffffff;
       border: 1.8px solid #95CAFA;
@@ -101,7 +123,6 @@
       letter-spacing: -0.2px;
       line-height: 1.4;
       
-      /* Ключевые свойства для многострочного текста в option и в select */
       white-space: normal;
       word-wrap: break-word;
       word-break: break-word;
@@ -113,7 +134,13 @@
       background-size: 1.1rem;
     }
 
-    /* Стили для option внутри select — поддерживаем перенос текста */
+    /* Стиль для placeholder (невыбранного состояния) — голубой текст */
+    .elegant-select.placeholder-selected {
+      color: #4a8bc2;
+      font-weight: 500;
+    }
+
+    /* Стили для option внутри select */
     .elegant-select option {
       white-space: normal;
       word-wrap: break-word;
@@ -124,12 +151,6 @@
       min-height: 2.8rem;
     }
 
-    /* Стиль для placeholder (невыбранного состояния) — голубой текст */
-    .elegant-select.placeholder-selected {
-      color: #4a8bc2;
-      font-weight: 500;
-    }
-
     .elegant-select:hover {
       background-color: #fbfeff;
     }
@@ -137,28 +158,6 @@
     .elegant-select:focus {
       border-color: #95CAFA;
       box-shadow: 0 0 0 2px rgba(149, 202, 250, 0.3);
-    }
-
-    /* правая колонка — закреплённый текст (определение) */
-    .fixed-text-card {
-      background: #ffffff;
-      border: 1.8px solid #95CAFA;
-      border-radius: 1.2rem;
-      padding: 1rem 1.2rem;
-      transition: all 0.2s;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
-      display: flex;
-      align-items: center;
-      min-height: 88px;
-    }
-
-    .fixed-text-card span {
-      font-size: 1rem;
-      font-weight: 500;
-      color: #1f2a3e;
-      line-height: 1.45;
-      letter-spacing: -0.2px;
-      word-break: break-word;
     }
 
     /* кнопка проверки */
@@ -222,15 +221,15 @@
     }
 
     /* состояния ячеек после проверки */
-    .row-correct .select-card,
-    .row-correct .fixed-text-card {
+    .row-correct .fixed-text-card,
+    .row-correct .select-card {
       background-color: #e1f7e8;
       border-color: #2e8b57;
       transition: all 0.2s ease;
     }
 
-    .row-incorrect .select-card,
-    .row-incorrect .fixed-text-card {
+    .row-incorrect .fixed-text-card,
+    .row-incorrect .select-card {
       background-color: #ffe6e6;
       border-color: #d14545;
       transition: all 0.2s ease;
@@ -265,7 +264,6 @@
       }
     }
 
-    /* дополнительно для очень маленьких экранов */
     @media (max-width: 600px) {
       .elegant-select {
         font-size: 0.8rem;
@@ -280,13 +278,13 @@
 <body>
 <div class="trainer-card">
   <div class="trainer-container">
-    <!-- Шапка столбцов -->
+    <!-- Шапка столбцов: слева определение, справа выбор термина -->
     <div class="table-header">
-      <div class="header-cell">Термин</div>
       <div class="header-cell">Определение</div>
+      <div class="header-cell">Термин</div>
     </div>
 
-    <!-- Динамическая таблица: левая часть (select) + правая часть (текст определения) -->
+    <!-- Динамическая таблица: левая часть (текст определения) + правая часть (select) -->
     <div class="matching-grid" id="matchingGrid"></div>
 
     <div class="check-button-wrapper">
@@ -300,8 +298,8 @@
 <script>
   // --------------------------------------------------------------
   // ДАННЫЕ ДЛЯ ТРЕНАЖЁРА
-  // Левый столбец (выбор) — "Термин"
-  // Правый столбец (закреплённый текст) — "Определение"
+  // Левый столбец (закреплённый текст) — "Определение"
+  // Правый столбец (выбор) — "Термин"
   // --------------------------------------------------------------
   const trainingData = [
     {
@@ -407,7 +405,7 @@
   // Хранилище ссылок на DOM-элементы строк
   let rowElements = [];
 
-  // Функция отрисовки таблицы (левый select, правый фикс. текст)
+  // Функция отрисовки таблицы (левый текст, правый select)
   function renderTable() {
     gridContainer.innerHTML = '';
     rowElements = [];
@@ -415,24 +413,30 @@
 
     trainingData.forEach((item, idx) => {
       // Значение по умолчанию — пустая строка (ничего не выбрано)
-      const defaultOption = "";
-      selectedValues[idx] = defaultOption;
+      selectedValues[idx] = "";
 
       // Создаём строку
       const rowDiv = document.createElement('div');
       rowDiv.className = 'row-item';
       rowDiv.setAttribute('data-row-index', idx);
 
-      // ----- ЛЕВАЯ КОЛОНКА: выпадающий список (термин) -----
-      const leftSelectCard = document.createElement('div');
-      leftSelectCard.className = 'select-card';
+      // ----- ЛЕВАЯ КОЛОНКА: закреплённый текст (определение) -----
+      const leftTextCard = document.createElement('div');
+      leftTextCard.className = 'fixed-text-card';
+      const instructionSpan = document.createElement('span');
+      instructionSpan.textContent = item.fixedInstruction;
+      leftTextCard.appendChild(instructionSpan);
+
+      // ----- ПРАВАЯ КОЛОНКА: выпадающий список (термин) -----
+      const rightSelectCard = document.createElement('div');
+      rightSelectCard.className = 'select-card';
       const selectElem = document.createElement('select');
       selectElem.className = 'elegant-select';
       selectElem.setAttribute('data-idx', idx);
       
       selectElem.style.width = '100%';
       
-      // ---- ВАЖНО: добавляем пустой option-плейсхолдер первым ----
+      // Добавляем пустой option-плейсхолдер первым
       const placeholderOption = document.createElement('option');
       placeholderOption.value = "";
       placeholderOption.textContent = "— Выберите термин —";
@@ -460,10 +464,6 @@
         const newValue = e.target.value;
         selectedValues[rowIndex] = newValue;
         
-        // Управляем классом placeholder-selected: если выбрано пустое значение (не должно быть, но на всякий случай)
-        // или если значение не из списка терминов (пустое) — оставляем голубой стиль.
-        // Поскольку placeholder отключен и не может быть выбран снова, пользователь всегда выбирает термин.
-        // Но если пользователь каким-то образом сбросит? Такого не произойдёт, но подстрахуемся:
         if (newValue === "") {
           selectElem.classList.add('placeholder-selected');
         } else {
@@ -475,25 +475,18 @@
         messageDiv.innerHTML = '';
       });
 
-      leftSelectCard.appendChild(selectElem);
+      rightSelectCard.appendChild(selectElem);
 
-      // ----- ПРАВАЯ КОЛОНКА: закреплённый текст (определение) -----
-      const rightTextCard = document.createElement('div');
-      rightTextCard.className = 'fixed-text-card';
-      const instructionSpan = document.createElement('span');
-      instructionSpan.textContent = item.fixedInstruction;
-      rightTextCard.appendChild(instructionSpan);
-
-      // Собираем строку
-      rowDiv.appendChild(leftSelectCard);
-      rowDiv.appendChild(rightTextCard);
+      // Собираем строку (слева текст, справа select)
+      rowDiv.appendChild(leftTextCard);
+      rowDiv.appendChild(rightSelectCard);
       gridContainer.appendChild(rowDiv);
 
       // Сохраняем данные строки для последующей проверки
       rowElements.push({
         container: rowDiv,
-        leftCard: leftSelectCard,
-        rightCard: rightTextCard,
+        leftCard: leftTextCard,
+        rightCard: rightSelectCard,
         select: selectElem,
         correctAnswer: item.correctValue,
         index: idx
@@ -519,8 +512,8 @@
     }
   }
 
-  // Основная проверка: каждая строка — если выбранный термин совпадает с правильным,
-  // строка становится зелёной, иначе красной + выводится сообщение об ошибке.
+  // Основная проверка: если выбранный термин совпадает с правильным,
+  // строка становится зелёной, иначе красной + сообщение об ошибке.
   function validateAndHighlight() {
     clearValidationStyles();
     let allCorrect = true;
@@ -538,7 +531,6 @@
       }
     }
 
-    // Сообщение в зависимости от результата
     if (allCorrect) {
       messageDiv.innerHTML = '<div class="success-message">Всё верно! Все соответствия правильные.</div>';
     } else {
@@ -552,7 +544,7 @@
     validateAndHighlight();
   }
 
-  // Инициализация и сброс стилей при старте
+  // Инициализация
   function init() {
     renderTable();
     syncSelectedFromDOM();
