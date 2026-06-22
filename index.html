@@ -395,6 +395,16 @@
     }
   ];
 
+  // Функция для перемешивания массива (алгоритм Фишера-Йетса)
+  function shuffleArray(array) {
+    const shuffled = [...array];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+  }
+
   // DOM элементы
   const gridContainer = document.getElementById('matchingGrid');
   const checkButton = document.getElementById('checkBtn');
@@ -445,8 +455,11 @@
       placeholderOption.style.color = "#4a8bc2";
       selectElem.appendChild(placeholderOption);
       
-      // Заполняем опции (все возможные термины)
-      item.options.forEach(opt => {
+      // Перемешиваем варианты ответов перед добавлением в select
+      const shuffledOptions = shuffleArray(item.options);
+      
+      // Заполняем опции (все возможные термины в перемешанном порядке)
+      shuffledOptions.forEach(opt => {
         const optionElem = document.createElement('option');
         optionElem.value = opt;
         optionElem.textContent = opt;
@@ -532,9 +545,9 @@
     }
 
     if (allCorrect) {
-      messageDiv.innerHTML = '<div class="success-message">Всё верно! Все соответствия правильные.</div>';
+      messageDiv.innerHTML = '<div class="success-message">Вы правильно сопоставили термины с определениями!</div>';
     } else {
-      messageDiv.innerHTML = '<div class="error-message">У вас ошибка. Проверьте выделенные красным строки.</div>';
+      messageDiv.innerHTML = '<div class="error-message">Проверьте строки, которые подсвечены красным цветом.</div>';
     }
   }
 
