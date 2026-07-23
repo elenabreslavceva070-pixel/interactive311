@@ -3,228 +3,33 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>Тренажёр: Термины</title>
+  <title>Тренажёр: Определения → Термины</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      background: linear-gradient(145deg, #eef2f7 0%, #d9e0e8 100%);
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-family: 'Segoe UI', 'Inter', system-ui, sans-serif;
-      padding: 1rem;
-    }
-
-    .trainer-card {
-      max-width: 1100px;
-      width: 100%;
-      background: #ffffff;
-      border-radius: 1.5rem;
-      box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.2);
-      overflow: hidden;
-    }
-
-    .trainer-container {
-      padding: 1.2rem 1.5rem 1.5rem 1.5rem;
-    }
-
-    .table-header {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-      margin-bottom: 1.2rem;
-      border-bottom: 2px solid #e6edf4;
-      padding-bottom: 0.7rem;
-    }
-
-    .header-cell {
-      font-weight: 600;
-      font-size: 0.95rem;
-      color: #1f2a3e;
-      background: #f8fafd;
-      padding: 0.5rem 0.8rem;
-      border-radius: 0.8rem;
-      text-align: center;
-    }
-
-    .matching-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 0.6rem;
-    }
-
-    .row-item {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-      align-items: stretch;
-    }
-
-    .fixed-text-card {
-      background: #ffffff;
-      border: 1.5px solid #95CAFA;
-      border-radius: 0.8rem;
-      padding: 0.6rem 0.9rem;
-      display: flex;
-      align-items: center;
-      min-height: 56px;
-    }
-
-    .fixed-text-card span {
-      font-size: 0.85rem;
-      font-weight: 500;
-      color: #1f2a3e;
-      line-height: 1.35;
-      word-break: break-word;
-    }
-
-    .select-card {
-      background: #ffffff;
-      border: 1.5px solid #95CAFA;
-      border-radius: 0.8rem;
-      padding: 0.3rem 0.7rem;
-      display: flex;
-      align-items: center;
-    }
-
-    .elegant-select {
-      width: 100%;
-      padding: 0.45rem 1.6rem 0.45rem 0.7rem;
-      font-size: 0.82rem;
-      font-family: 'Segoe UI', 'Inter', sans-serif;
-      font-weight: 500;
-      color: #1e2a3a;
-      background-color: #ffffff;
-      border: none;
-      border-radius: 0.6rem;
-      cursor: pointer;
-      outline: none;
-      line-height: 1.3;
-      white-space: normal;
-      word-wrap: break-word;
-      word-break: break-word;
-      appearance: none;
-      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23465a72' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>");
-      background-repeat: no-repeat;
-      background-position: right 0.5rem center;
-      background-size: 0.9rem;
-    }
-
-    .elegant-select.placeholder-selected {
-      color: #4a8bc2;
-      font-weight: 500;
-    }
-
-    .elegant-select option {
-      white-space: normal;
-      word-wrap: break-word;
-      word-break: break-word;
-      padding: 0.4rem 0.6rem;
-      font-size: 0.82rem;
-      line-height: 1.3;
-      min-height: 2.2rem;
-    }
-
-    .elegant-select:focus {
-      border-color: #95CAFA;
-      box-shadow: 0 0 0 2px rgba(149, 202, 250, 0.25);
-    }
-
-    .check-button-wrapper {
-      margin-top: 1.5rem;
-      display: flex;
-      justify-content: center;
-    }
-
-    .check-btn {
-      background: #1f2a3e;
-      border: none;
-      padding: 0.6rem 2rem;
-      font-size: 0.9rem;
-      font-weight: 600;
-      font-family: inherit;
-      color: white;
-      border-radius: 2rem;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-
-    .check-btn:hover {
-      background: #2c3e5c;
-      transform: translateY(-1px);
-      box-shadow: 0 6px 16px -4px rgba(0, 0, 0, 0.15);
-    }
-
-    .check-btn:active {
-      transform: translateY(1px);
-    }
-
-    .message-area {
-      margin-top: 1rem;
-      text-align: center;
-      font-size: 0.85rem;
-      font-weight: 500;
-      min-height: 2.2rem;
-    }
-
-    .error-message {
-      color: #d14545;
-      background: #fff5f5;
-      display: inline-block;
-      padding: 0.4rem 1.2rem;
-      border-radius: 1.5rem;
-      border: 1px solid #f5c6c6;
-    }
-
-    .success-message {
-      color: #2a7a3b;
-      background: #edf7f0;
-      display: inline-block;
-      padding: 0.4rem 1.2rem;
-      border-radius: 1.5rem;
-      border: 1px solid #b8e0c4;
-    }
-
-    .row-correct .fixed-text-card,
-    .row-correct .select-card {
-      background-color: #e1f7e8;
-      border-color: #2e8b57;
-    }
-
-    .row-incorrect .fixed-text-card,
-    .row-incorrect .select-card {
-      background-color: #ffe6e6;
-      border-color: #d14545;
-    }
-
-    @media (max-width: 700px) {
-      .trainer-container {
-        padding: 0.8rem;
-      }
-      .row-item {
-        gap: 0.6rem;
-      }
-      .header-cell {
-        font-size: 0.8rem;
-        padding: 0.4rem;
-      }
-      .fixed-text-card span {
-        font-size: 0.75rem;
-      }
-      .elegant-select {
-        font-size: 0.72rem;
-        padding: 0.35rem 1.4rem 0.35rem 0.6rem;
-      }
-      .elegant-select option {
-        font-size: 0.72rem;
-      }
-    }
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{background:linear-gradient(145deg,#eef2f7,#d9e0e8);min-height:100vh;display:flex;justify-content:center;align-items:center;font-family:'Segoe UI','Inter',system-ui,sans-serif;padding:1rem}
+    .trainer-card{max-width:1100px;width:100%;background:#fff;border-radius:1.5rem;box-shadow:0 20px 40px -12px rgba(0,0,0,.2);overflow:hidden}
+    .trainer-container{padding:1rem 1.2rem 1.2rem}
+    .table-header{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-bottom:1rem;border-bottom:2px solid #e6edf4;padding-bottom:.6rem}
+    .header-cell{font-weight:600;font-size:.9rem;color:#1f2a3e;background:#f8fafd;padding:.4rem .6rem;border-radius:.8rem;text-align:center}
+    .matching-grid{display:flex;flex-direction:column;gap:.5rem}
+    .row-item{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;align-items:stretch}
+    .fixed-text-card{background:#fff;border:1.5px solid #95CAFA;border-radius:.8rem;padding:.5rem .8rem;display:flex;align-items:center;min-height:48px}
+    .fixed-text-card span{font-size:.82rem;font-weight:500;color:#1f2a3e;line-height:1.35;word-break:break-word}
+    .select-card{background:#fff;border:1.5px solid #95CAFA;border-radius:.8rem;padding:.2rem .6rem;display:flex;align-items:center}
+    .elegant-select{width:100%;padding:.35rem 1.5rem .35rem .6rem;font-size:.78rem;font-family:'Segoe UI','Inter',sans-serif;font-weight:500;color:#1e2a3a;background:#fff;border:none;border-radius:.6rem;cursor:pointer;outline:none;line-height:1.3;white-space:normal;word-wrap:break-word;word-break:break-word;appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23465a72' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>");background-repeat:no-repeat;background-position:right .5rem center;background-size:.8rem}
+    .elegant-select.placeholder-selected{color:#4a8bc2;font-weight:500}
+    .elegant-select option{white-space:normal;word-wrap:break-word;word-break:break-word;padding:.3rem .5rem;font-size:.78rem;line-height:1.3;min-height:2rem}
+    .elegant-select:focus{box-shadow:0 0 0 2px rgba(149,202,250,.25)}
+    .check-button-wrapper{margin-top:1.2rem;display:flex;justify-content:center}
+    .check-btn{background:#1f2a3e;border:none;padding:.5rem 1.8rem;font-size:.85rem;font-weight:600;font-family:inherit;color:#fff;border-radius:2rem;cursor:pointer;transition:.2s}
+    .check-btn:hover{background:#2c3e5c;transform:translateY(-1px);box-shadow:0 6px 16px -4px rgba(0,0,0,.15)}
+    .check-btn:active{transform:translateY(1px)}
+    .message-area{margin-top:.8rem;text-align:center;font-size:.82rem;font-weight:500;min-height:2rem}
+    .error-message{color:#d14545;background:#fff5f5;display:inline-block;padding:.3rem 1rem;border-radius:1.5rem;border:1px solid #f5c6c6}
+    .success-message{color:#2a7a3b;background:#edf7f0;display:inline-block;padding:.3rem 1rem;border-radius:1.5rem;border:1px solid #b8e0c4}
+    .row-correct .fixed-text-card,.row-correct .select-card{background-color:#e1f7e8;border-color:#2e8b57}
+    .row-incorrect .fixed-text-card,.row-incorrect .select-card{background-color:#ffe6e6;border-color:#d14545}
+    @media(max-width:700px){.trainer-container{padding:.6rem}.row-item{gap:.5rem}.header-cell{font-size:.78rem;padding:.3rem}.fixed-text-card span{font-size:.72rem}.elegant-select{font-size:.68rem;padding:.25rem 1.3rem .25rem .5rem}.elegant-select option{font-size:.68rem}}
   </style>
 </head>
 <body>
@@ -234,214 +39,69 @@
       <div class="header-cell">Определение</div>
       <div class="header-cell">Термин</div>
     </div>
-
     <div class="matching-grid" id="matchingGrid"></div>
-
     <div class="check-button-wrapper">
       <button class="check-btn" id="checkBtn">Проверить</button>
     </div>
-
     <div class="message-area" id="messageArea"></div>
   </div>
 </div>
 
 <script>
-  const trainingData = [
-    {
-      fixedInstruction: "Соглашение сторон, где каждая обязуется что-то сделать или передать.",
-      options: ["Договор", "Актив по договору", "Обязательство по договору", "Доход", "Продукция", "Выручка", "Цена сделки", "Обязанность к исполнению", "Цена обособленной продажи"],
-      correctValue: "Договор"
-    },
-    {
-      fixedInstruction: "Право на оплату за выполненную работу/товар, зависящее от будущих условий (п.12).",
-      options: ["Договор", "Актив по договору", "Обязательство по договору", "Доход", "Продукция", "Выручка", "Цена сделки", "Обязанность к исполнению", "Цена обособленной продажи"],
-      correctValue: "Актив по договору"
-    },
-    {
-      fixedInstruction: "Обязанность передать товар/услугу, за которые уже получена оплата.",
-      options: ["Договор", "Актив по договору", "Обязательство по договору", "Доход", "Продукция", "Выручка", "Цена сделки", "Обязанность к исполнению", "Цена обособленной продажи"],
-      correctValue: "Обязательство по договору"
-    },
-    {
-      fixedInstruction: "Увеличение экономических выгод за период (кроме взносов участников).",
-      options: ["Договор", "Актив по договору", "Обязательство по договору", "Доход", "Продукция", "Выручка", "Цена сделки", "Обязанность к исполнению", "Цена обособленной продажи"],
-      correctValue: "Доход"
-    },
-    {
-      fixedInstruction: "Товары, работы и услуги.",
-      options: ["Договор", "Актив по договору", "Обязательство по договору", "Доход", "Продукция", "Выручка", "Цена сделки", "Обязанность к исполнению", "Цена обособленной продажи"],
-      correctValue: "Продукция"
-    },
-    {
-      fixedInstruction: "Доход от основной деятельности компании.",
-      options: ["Договор", "Актив по договору", "Обязательство по договору", "Доход", "Продукция", "Выручка", "Цена сделки", "Обязанность к исполнению", "Цена обособленной продажи"],
-      correctValue: "Выручка"
-    },
-    {
-      fixedInstruction: "Ожидаемая сумма к получению от покупателя (без сумм за третьих).",
-      options: ["Договор", "Актив по договору", "Обязательство по договору", "Доход", "Продукция", "Выручка", "Цена сделки", "Обязанность к исполнению", "Цена обособленной продажи"],
-      correctValue: "Цена сделки"
-    },
-    {
-      fixedInstruction: "Обещание передать товары/услуги (или несколько одинаковых) по одному порядку.",
-      options: ["Договор", "Актив по договору", "Обязательство по договору", "Доход", "Продукция", "Выручка", "Цена сделки", "Обязанность к исполнению", "Цена обособленной продажи"],
-      correctValue: "Обязанность к исполнению"
-    },
-    {
-      fixedInstruction: "Цена, по которой товар/услуга продавались бы по отдельности.",
-      options: ["Договор", "Актив по договору", "Обязательство по договору", "Доход", "Продукция", "Выручка", "Цена сделки", "Обязанность к исполнению", "Цена обособленной продажи"],
-      correctValue: "Цена обособленной продажи"
-    }
+  const trainingData=[
+    {fixedInstruction:"Соглашение между сторонами, при котором каждая обязуется что-то сделать или передать.",options:["Договор","Актив по договору","Обязательство по договору","Доход","Продукция","Выручка","Цена сделки","Обязанность к исполнению","Цена обособленной продажи"],correctValue:"Договор"},
+    {fixedInstruction:"Право компании получить оплату за работу, которую выполнили, или товар, который переделали, если это право зависит от выполнения будущих условий. Чтобы принять такой актив к учету, его нужно сначала идентифицировать п.12.",options:["Договор","Актив по договору","Обязательство по договору","Доход","Продукция","Выручка","Цена сделки","Обязанность к исполнению","Цена обособленной продажи"],correctValue:"Актив по договору"},
+    {fixedInstruction:"Обязанность компании передать товар или оказать услугу, за которые она уже получила оплату или которые покупатель обязан оплатить.",options:["Договор","Актив по договору","Обязательство по договору","Доход","Продукция","Выручка","Цена сделки","Обязанность к исполнению","Цена обособленной продажи"],correctValue:"Обязательство по договору"},
+    {fixedInstruction:"Увеличение экономических выгод в течение отчетного периода в форме поступлений или улучшения качества активов либо уменьшения величины обязательств, которое приводит к увеличению собственного капитала, не связанного с взносами участников капитала.",options:["Договор","Актив по договору","Обязательство по договору","Доход","Продукция","Выручка","Цена сделки","Обязанность к исполнению","Цена обособленной продажи"],correctValue:"Доход"},
+    {fixedInstruction:"Товары, работы и услуги.",options:["Договор","Актив по договору","Обязательство по договору","Доход","Продукция","Выручка","Цена сделки","Обязанность к исполнению","Цена обособленной продажи"],correctValue:"Продукция"},
+    {fixedInstruction:"Доход, который компания получает от своей основной деятельности.",options:["Договор","Актив по договору","Обязательство по договору","Доход","Продукция","Выручка","Цена сделки","Обязанность к исполнению","Цена обособленной продажи"],correctValue:"Выручка"},
+    {fixedInstruction:"Сумма, которую компания ожидает получить от покупателя за товары или услуги, без учета сумм, которые она получает за третьих.",options:["Договор","Актив по договору","Обязательство по договору","Доход","Продукция","Выручка","Цена сделки","Обязанность к исполнению","Цена обособленной продажи"],correctValue:"Цена сделки"},
+    {fixedInstruction:"Обещание в договоре передать покупателю товары или услугу, либо несколько одинаковых товаров или услуг, которые передаются по одному и тому же порядку.",options:["Договор","Актив по договору","Обязательство по договору","Доход","Продукция","Выручка","Цена сделки","Обязанность к исполнению","Цена обособленной продажи"],correctValue:"Обязанность к исполнению"},
+    {fixedInstruction:"Цена, по которой компания продала бы покупателю обещанный товар или услугу по отдельности.",options:["Договор","Актив по договору","Обязательство по договору","Доход","Продукция","Выручка","Цена сделки","Обязанность к исполнению","Цена обособленной продажи"],correctValue:"Цена обособленной продажи"}
   ];
 
-  function shuffleArray(array) {
-    const shuffled = [...array];
-    for (let i = shuffled.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-    }
-    return shuffled;
-  }
+  function shuffleArray(a){const s=[...a];for(let i=s.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[s[i],s[j]]=[s[j],s[i]]}return s}
 
-  const gridContainer = document.getElementById('matchingGrid');
-  const checkButton = document.getElementById('checkBtn');
-  const messageDiv = document.getElementById('messageArea');
+  const grid=document.getElementById('matchingGrid'),btn=document.getElementById('checkBtn'),msg=document.getElementById('messageArea');
+  let selected=[],rows=[];
 
-  let selectedValues = [];
-  let rowElements = [];
-
-  function renderTable() {
-    gridContainer.innerHTML = '';
-    rowElements = [];
-    selectedValues = [];
-
-    trainingData.forEach((item, idx) => {
-      selectedValues[idx] = "";
-
-      const rowDiv = document.createElement('div');
-      rowDiv.className = 'row-item';
-      rowDiv.setAttribute('data-row-index', idx);
-
-      const leftTextCard = document.createElement('div');
-      leftTextCard.className = 'fixed-text-card';
-      const instructionSpan = document.createElement('span');
-      instructionSpan.textContent = item.fixedInstruction;
-      leftTextCard.appendChild(instructionSpan);
-
-      const rightSelectCard = document.createElement('div');
-      rightSelectCard.className = 'select-card';
-      const selectElem = document.createElement('select');
-      selectElem.className = 'elegant-select';
-      selectElem.setAttribute('data-idx', idx);
-      selectElem.style.width = '100%';
-
-      const placeholderOption = document.createElement('option');
-      placeholderOption.value = "";
-      placeholderOption.textContent = "— Выбрать —";
-      placeholderOption.disabled = true;
-      placeholderOption.selected = true;
-      placeholderOption.style.color = "#4a8bc2";
-      selectElem.appendChild(placeholderOption);
-
-      const shuffledOptions = shuffleArray(item.options);
-      shuffledOptions.forEach(opt => {
-        const optionElem = document.createElement('option');
-        optionElem.value = opt;
-        optionElem.textContent = opt;
-        optionElem.style.whiteSpace = 'normal';
-        optionElem.style.wordBreak = 'break-word';
-        selectElem.appendChild(optionElem);
+  function render(){
+    grid.innerHTML='';rows=[];selected=[];
+    trainingData.forEach((item,idx)=>{
+      selected[idx]="";
+      const row=document.createElement('div');row.className='row-item';row.dataset.rowIndex=idx;
+      const left=document.createElement('div');left.className='fixed-text-card';
+      const span=document.createElement('span');span.textContent=item.fixedInstruction;left.appendChild(span);
+      const right=document.createElement('div');right.className='select-card';
+      const sel=document.createElement('select');sel.className='elegant-select';sel.dataset.idx=idx;sel.style.width='100%';
+      const ph=document.createElement('option');ph.value="";ph.textContent="— Выберите термин —";ph.disabled=true;ph.selected=true;ph.style.color="#4a8bc2";sel.appendChild(ph);
+      shuffleArray(item.options).forEach(o=>{const opt=document.createElement('option');opt.value=o;opt.textContent=o;opt.style.whiteSpace='normal';opt.style.wordBreak='break-word';sel.appendChild(opt)});
+      sel.classList.add('placeholder-selected');
+      sel.addEventListener('change',e=>{
+        const i=+e.target.dataset.idx,v=e.target.value;selected[i]=v;
+        v===""?sel.classList.add('placeholder-selected'):sel.classList.remove('placeholder-selected');
+        rows.forEach(r=>r.container.classList.remove('row-correct','row-incorrect'));
+        msg.innerHTML='';
       });
-
-      selectElem.classList.add('placeholder-selected');
-
-      selectElem.addEventListener('change', (e) => {
-        const rowIndex = parseInt(e.target.getAttribute('data-idx'));
-        const newValue = e.target.value;
-        selectedValues[rowIndex] = newValue;
-        
-        if (newValue === "") {
-          selectElem.classList.add('placeholder-selected');
-        } else {
-          selectElem.classList.remove('placeholder-selected');
-        }
-        
-        clearValidationStyles();
-        messageDiv.innerHTML = '';
-      });
-
-      rightSelectCard.appendChild(selectElem);
-      rowDiv.appendChild(leftTextCard);
-      rowDiv.appendChild(rightSelectCard);
-      gridContainer.appendChild(rowDiv);
-
-      rowElements.push({
-        container: rowDiv,
-        select: selectElem,
-        correctAnswer: item.correctValue,
-        index: idx
-      });
+      right.appendChild(sel);row.appendChild(left);row.appendChild(right);grid.appendChild(row);
+      rows.push({container:row,select:sel,correctAnswer:item.correctValue,index:idx});
     });
   }
 
-  function clearValidationStyles() {
-    rowElements.forEach(row => {
-      row.container.classList.remove('row-correct', 'row-incorrect');
+  function validate(){
+    rows.forEach(r=>r.container.classList.remove('row-correct','row-incorrect'));
+    let all=true;
+    rows.forEach((r,i)=>{
+      const u=selected[i],ok=u!==""&&u===r.correctAnswer;
+      ok?(r.container.classList.add('row-correct')):(all=false,r.container.classList.add('row-incorrect'));
     });
+    msg.innerHTML=all?'<div class="success-message">Вы правильно сопоставили термины с определениями!</div>':'<div class="error-message">Проверьте строки, которые подсвечены красным цветом.</div>';
   }
 
-  function syncSelectedFromDOM() {
-    rowElements.forEach((row, i) => {
-      selectedValues[i] = row.select.value;
-    });
-  }
-
-  function validateAndHighlight() {
-    clearValidationStyles();
-    let allCorrect = true;
-    let errorCount = 0;
-
-    rowElements.forEach((row, i) => {
-      const userChoice = selectedValues[i];
-      const isRowCorrect = (userChoice !== "" && userChoice === row.correctAnswer);
-
-      if (!isRowCorrect) {
-        allCorrect = false;
-        errorCount++;
-        row.container.classList.add('row-incorrect');
-      } else {
-        row.container.classList.add('row-correct');
-      }
-    });
-
-    if (allCorrect) {
-      messageDiv.innerHTML = '<div class="success-message">✓ Отлично! Все термины сопоставлены верно!</div>';
-    } else {
-      const errorWord = errorCount === 1 ? 'строка' : 'строк';
-      messageDiv.innerHTML = `<div class="error-message">Вы допустили ошибку. Обратите внимание на красные строки (${errorCount} ${errorWord}).</div>`;
-    }
-  }
-
-  function beforeCheck() {
-    syncSelectedFromDOM();
-    validateAndHighlight();
-  }
-
-  function init() {
-    renderTable();
-    syncSelectedFromDOM();
-    clearValidationStyles();
-    messageDiv.innerHTML = '';
-  }
-
-  function bindEvents() {
-    const newCheckBtn = checkButton.cloneNode(true);
-    checkButton.parentNode.replaceChild(newCheckBtn, checkButton);
-    document.getElementById('checkBtn').addEventListener('click', beforeCheck);
-  }
-
-  init();
-  bindEvents();
+  function check(){rows.forEach((r,i)=>selected[i]=r.select.value);validate()}
+  function init(){render();rows.forEach((r,i)=>selected[i]=r.select.value);msg.innerHTML=''}
+  function bind(){const b=btn.cloneNode(true);btn.parentNode.replaceChild(b,btn);document.getElementById('checkBtn').addEventListener('click',check)}
+  init();bind();
 </script>
 </body>
 </html>
